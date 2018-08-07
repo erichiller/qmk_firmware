@@ -37,6 +37,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 /* key matrix size */
 #define MATRIX_ROWS 6
 #define MATRIX_COLS 19
+#define DIODE_DIRECTION COL2ROW
+
 
 #define RGB_DI_PIN C7 // Pin 13 on the Feather board
 #define RGBLED_NUM 8

@@ -16,7 +16,7 @@
 static bool initialized;
 static uint8_t reinit_counter;
 
-#define i2cAddress 0x27 // Configurable with jumpers
+#define i2cAddress 0x20 // Configurable with jumpers
 #define i2cTimeout 200 // milliseconds
 enum mcp23017_registers {
 	IODirectionA = 0x00,

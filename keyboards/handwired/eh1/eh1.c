@@ -1,4 +1,4 @@
-#include "magicforce61.h"
+#include "eh1.h"
 
 void matrix_init_kb(void) {
 	// put your keyboard start-up code here

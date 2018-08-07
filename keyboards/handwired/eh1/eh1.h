@@ -1,38 +1,7 @@
-#ifndef EH2_H
-#define EH2_H
+#ifndef EH1_H
+#define EH1_H
 
 #include "quantum.h"
-#include <stddef.h>
-#ifdef __AVR__
-#include <avr/io.h>
-#include <avr/interrupt.h>
-#endif
-
-extern bool iota_gfx_init(void);
-extern void iota_gfx_task(void);
-extern bool iota_gfx_off(void);
-extern bool iota_gfx_on(void);
-extern void iota_gfx_flush(void);
-extern void iota_gfx_write_char(uint8_t c);
-extern void iota_gfx_write(const char *data);
-extern void iota_gfx_write_P(const char *data);
-extern void iota_gfx_clear_screen(void);
-
-bool iota_mcp23017_init(void);
-bool iota_mcp23017_make_ready(void);
-uint16_t iota_mcp23017_read(void);
-bool iota_mcp23017_enable_interrupts(void);
-
-
-#define _QWERTY 0
-#define _FN1 1
-#define _FN2 2
-#define KC_ KC_TRNS
-#define KC_X0 LT(_FN2, KC_GRV)
-#define KC_X1 MO(_FN1)
-#define KC_NAV_ESC LT(_FN1, KC_ESC)
-#define KC_GUI MAGIC_UNNO_GUI
-
 
 #define KEYMAP( \
     K00, K01, K02, K03, K04, K05, K06, K07, K08, K09, K0A, K0B, K0C, K0D, K0E, K0F, K10, K11, K12, \
@@ -49,6 +18,5 @@ bool iota_mcp23017_enable_interrupts(void);
   {  KC_##K80, KC_NO   , KC_##K82, KC_##K83, KC_##K84, KC_##K85, KC_##K86, KC_##K87, KC_##K88, KC_##K89, KC_##K8A, KC_##K8B, KC_NO   , KC_##K8D, KC_##K8E, KC_##K8F, KC_##K90, KC_##K91, KC_##K92 },  \
   {  KC_##KA0, KC_##KA1, KC_##KA2, KC_NO   , KC_NO   , KC_NO   , KC_##KA6, KC_NO   , KC_NO   , KC_NO   , KC_##KAA, KC_##KAB, KC_##KAC, KC_##KAD, KC_##KAE, KC_##KAF, KC_##KB0, KC_##KB1, KC_##KB2 }  \
 }
-
 
 #endif

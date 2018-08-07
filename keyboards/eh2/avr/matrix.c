@@ -48,7 +48,51 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // col0-7: mcp23107 GPIOA0-7
 // col8-14: mcp23107 GPIOB1-7 (note that B0 is unused)
 // PD3 (INT3) connect to interrupt pins on mcp23107
-static const uint8_t row_pins[MATRIX_ROWS] = {F7, F6, F5, F4, F1};
+
+
+
+#define ROW_SHIFTER ((matrix_row_t)1)
+
+#define MCP_GP_BASE 0x70
+
+#define GPB0 (MCP_GP_BASE + 0)
+#define GPB1 (MCP_GP_BASE + 1)
+#define GPB2 (MCP_GP_BASE + 2)
+#define GPB3 (MCP_GP_BASE + 3)
+#define GPB4 (MCP_GP_BASE + 4)
+#define GPB5 (MCP_GP_BASE + 5)
+#define GPB6 (MCP_GP_BASE + 6)
+#define GPB7 (MCP_GP_BASE + 7)
+#define GPA0 (MCP_GP_BASE + 0x08 + 0)
+#define GPA1 (MCP_GP_BASE + 0x08 + 1)
+#define GPA2 (MCP_GP_BASE + 0x08 + 2)
+#define GPA3 (MCP_GP_BASE + 0x08 + 3)
+#define GPA4 (MCP_GP_BASE + 0x08 + 4)
+#define GPA5 (MCP_GP_BASE + 0x08 + 5)
+#define GPA6 (MCP_GP_BASE + 0x08 + 6)
+#define GPA7 (MCP_GP_BASE + 0x08 + 7)
+
+#define ANL0  F7
+#define ANL1  F6
+#define ANL2  F5
+#define ANL3  F4
+#define ANL4  F1
+#define ANL5  F0
+#define ANL7  D7
+#define ANL9  B5
+#define ANL10 B6
+#define ANL11 D6
+
+
+// #define MATRIX_ROW_PINS { ANL0 , ANL1 , ANL2 , ANL3 , ANL4 , ANL5 }
+#define MATRIX_ROW_PINS { ANL5 , ANL4 , ANL3 , ANL2 , ANL1 , ANL0 }
+
+//                        C=0    C=1    C=2    C=3    C=4    C=5    C=6    C=7    C=8   C=9   C=10   C=11   C=12   C=13   C=14   C=15   C=16   C=17   C=18 //
+#define MATRIX_COL_PINS { GPA2 , GPA3 , GPA1 , GPB4 , GPB5 , GPB7 , GPB6 , D7   , B5  , B6  , GPA4 , D6   , GPB0 , GPA7 , GPB1 , GPA6 , GPB2 , GPA5 , GPB3 }
+static const matrix_col_t col_pins[MATRIX_COLS] = MATRIX_COL_PINS;
+
+static const uint8_t row_pins[MATRIX_ROWS] = MATRIX_ROW_PINS;
+
 #if DEBOUNCING_DELAY > 0
 static bool debouncing;
 static matrix_row_t matrix_debouncing[MATRIX_ROWS];
@@ -123,7 +167,7 @@ void matrix_power_up(void) {
 void matrix_init(void) {
   TWI_Init(TWI_BIT_PRESCALE_1, TWI_BITLENGTH_FROM_FREQ(1, 400000));
   iota_mcp23017_init();
-  iota_gfx_init();
+  // iota_gfx_init();
 
 //  pinMode(D3, PinDirectionInput);
 //  iota_mcp23017_enable_interrupts();
@@ -137,64 +181,30 @@ bool matrix_is_on(uint8_t row, uint8_t col) {
 
 matrix_row_t matrix_get_row(uint8_t row) { return matrix[row]; }
 
-static bool read_cols_on_row(matrix_row_t current_matrix[],
-                             uint8_t current_row) {
-  // Store last value of row prior to reading
-  matrix_row_t last_row_value = current_matrix[current_row];
+// static bool read_cols_on_row(matrix_row_t current_matrix[],
+//                              uint8_t current_row) {
+//   // Store last value of row prior to reading
+//   matrix_row_t last_row_value = current_matrix[current_row];
 
-  // Clear data in matrix row
-  current_matrix[current_row] = 0;
+//   // Clear data in matrix row
+//   current_matrix[current_row] = 0;
 
-  // Select row and wait for row selection to stabilize
-  select_row(current_row);
-  _delay_us(30);
+//   // Select row and wait for row selection to stabilize
+//   select_row(current_row);
+//   _delay_us(30);
 
-  current_matrix[current_row] = iota_mcp23017_read();
+//   current_matrix[current_row] = iota_mcp23017_read();
 
-  unselect_row(current_row);
+//   unselect_row(current_row);
 
-  return last_row_value != current_matrix[current_row];
-}
-
-#define MCP_GP_BASE 0x70
-#define GPB0 (MCP_GP_BASE + 0)
-#define GPB1 (MCP_GP_BASE + 1)
-#define GPB2 (MCP_GP_BASE + 2)
-#define GPB3 (MCP_GP_BASE + 3)
-#define GPB4 (MCP_GP_BASE + 4)
-#define GPB5 (MCP_GP_BASE + 5)
-#define GPB6 (MCP_GP_BASE + 6)
-#define GPB7 (MCP_GP_BASE + 7)
-#define GPA0 (MCP_GP_BASE + 0x08 + 0)
-#define GPA1 (MCP_GP_BASE + 0x08 + 1)
-#define GPA2 (MCP_GP_BASE + 0x08 + 2)
-#define GPA3 (MCP_GP_BASE + 0x08 + 3)
-#define GPA4 (MCP_GP_BASE + 0x08 + 4)
-#define GPA5 (MCP_GP_BASE + 0x08 + 5)
-#define GPA6 (MCP_GP_BASE + 0x08 + 6)
-#define GPA7 (MCP_GP_BASE + 0x08 + 7)
-
-#define A0  F7
-#define A1  F6
-#define A2  F5
-#define A3  F4
-#define A4  F1
-#define A5  F0
-#define A7  D7
-#define A9  B5
-#define A10 B6
-#define A11 D6
-
-
-#define MATRIX_ROW_PINS { A0 , A1 , A2 , A3 , A4 , A5 }
-//                        C=0    C=1    C=2    C=3    C=4    C=5    C=6    C=7    C=8   C=9   C=10   C=11   C=12   C=13   C=14   C=15   C=16   C=17   C=18 //
-#define MATRIX_COL_PINS { GPA2 , GPA3 , GPA1 , GPB4 , GPB5 , GPB7 , GPB6 , D7   , B5  , B6  , GPA4 , D6   , GPB0 , GPA7 , GPB1 , GPA6 , GPB2 , GPA5 , GPB3 }
-static const matrix_col_t col_pins[MATRIX_COLS] = MATRIX_COL_PINS;
+//   return last_row_value != current_matrix[current_row];
+// }
 
 
 static bool read_cols_on_row(matrix_row_t current_matrix[], uint8_t current_row){
     // Store last value of row prior to reading
     matrix_row_t last_row_value = current_matrix[current_row];
+    uint16_t mcp_pin_result     = iota_mcp23017_read();
 
     // Clear data in matrix row
     current_matrix[current_row] = 0;
@@ -202,14 +212,15 @@ static bool read_cols_on_row(matrix_row_t current_matrix[], uint8_t current_row)
     // Select row and wait for row selecton to stabilize
     select_row(current_row);
     wait_us(30);
-
-
+    xprintf("test");
 
     // For each col...
-    for(uint8_t col_index = 0; col_index < MATRIX_COLS; col_index++) {
+    for(matrix_row_t col_index = 0; col_index < MATRIX_COLS; col_index++) {
 
-      if ( (col_pins[col_index] >> 4) == (MCP_GP_BASE >> 4) ){
+      // if ( (col_pins[col_index] >> 4) == (MCP_GP_BASE >> 4) ){
+      if ( ( (col_pins[col_index]  & MCP_GP_BASE )  == MCP_GP_BASE ) ){
         // read pin from MCP23017
+        current_matrix[current_row] |= ( ( mcp_pin_result >> ( col_index ) ) & 1 ) ? 0 : ( ROW_SHIFTER << col_index);
 
       } else {
         // Read pin from adafruit

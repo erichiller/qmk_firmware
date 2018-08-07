@@ -20,4 +20,4 @@ ADAFRUIT_BLE_ENABLE ?= yes   # Enable Bluetooth with the Adafruit BLE boards
 AUDIO_ENABLE ?= no           # Audio output on port C6
 CUSTOM_MATRIX = yes          # We have a custom matrix
 
-
+CONSOLE_ENABLE = yes
