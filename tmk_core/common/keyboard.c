@@ -155,6 +155,9 @@ void keyboard_init(void) {
 #if  (defined(__AVR_AT90USB1286__) || defined(__AVR_AT90USB1287__) || defined(__AVR_ATmega32U4__))
   MCUCR |= _BV(JTD);
   MCUCR |= _BV(JTD);
+
+  xprintf("keyboard_init is __AVR_ATmega32U4__");
+//   #error __AVR_ATmega32U4__ // true
 #endif
     matrix_init();
 #ifdef PS2_MOUSE_ENABLE

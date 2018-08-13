@@ -1,9 +1,18 @@
-iota keyboard firmware
-======================
+eh2 keyboard firmware
+=====================
 
-## iota keyboard
+## Resources / References
 
-This is my (@wez) first keyboard build from scratch.  It has the following features/components:
+
+Retrieve default Include paths for gcc
+```sh
+echo | gcc -Wp,-v -x c++ - -fsyntax-only
+```
+
+[using mingw in Visual Studio](https://blogs.msdn.microsoft.com/vcblog/2017/07/19/using-mingw-and-cygwin-with-visual-cpp-and-open-folder/)
+
+
+## Building
 
 - Adafruit Feather 32u4 BLE MCU
 - MCP231017 IO expander for extra IO pins (used for the columns of the matrix)
@@ -34,3 +43,12 @@ make git-submodule
 make eh2/avr:default
 
 ```
+
+
+## About
+
+`select_row(row)` will take the row pin low
+
+`read_cols_on_row` checks if any of the col pins have been brought low
+ - returns bool, true if changed
+ - bitmask of cols on row where 1 = pin on (so it must be inverted)

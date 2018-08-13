@@ -23,10 +23,18 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #if (MATRIX_COLS <= 8)
 typedef  uint8_t    matrix_row_t;
+error("typedef uint8_t matrix_row_t");
+#error "typedef uint8_t matrix_row_t";
+
 #elif (MATRIX_COLS <= 16)
 typedef  uint16_t   matrix_row_t;
+error("typedef uint16_t matrix_row_t");
+#error "typedef uint16_t matrix_row_t";
+
+
 #elif (MATRIX_COLS <= 32)
 typedef  uint32_t   matrix_row_t;
+// #error "typedef uint32_t matrix_row_t";
 #else
 #error "MATRIX_COLS: invalid value"
 #endif

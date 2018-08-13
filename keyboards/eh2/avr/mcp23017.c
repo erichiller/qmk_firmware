@@ -2,11 +2,13 @@
 #include <stdbool.h>
 #include "pincontrol.h"
 #include "debug.h"
-#define USE_LUFA_TWI
+#include "print.h"
+#include <util/delay.h>
+// #define USE_LUFA_TWI
 
 #ifdef USE_LUFA_TWI
-#include "lib/lufa/LUFA/Drivers/Peripheral/TWI.h"
-#include "lib/lufa/LUFA/Drivers/Peripheral/AVR8/TWI_AVR8.c"
+#include "LUFA/Drivers/Peripheral/TWI.h"
+#include "LUFA/Drivers/Peripheral/AVR8/TWI_AVR8.c"
 #else
 #include "i2cmaster.h"
 #endif
@@ -64,24 +66,25 @@ static inline bool _set_register(enum mcp23017_registers reg, unsigned char val)
   uint8_t result = TWI_WritePacket(i2cAddress << 1, i2cTimeout, &addr, sizeof(addr),
                                    &val, sizeof(val));
   if (result) {
-    xprintf("mcp: set_register %d = %d failed: %s\n", reg, val, twi_err_str(result));
+   xprintf("mcp: set_register %d = %d failed: %s\n", reg, val, twi_err_str(result));
+  _delay_ms(1000);
   }
   return result == 0;
 #else
   bool success = false;
   if (i2c_start_write(i2cAddress)) {
-    xprintf("mcp: start_write failed\n");
+   xprintf("mcp: start_write failed\n");
     goto done;
   }
 
   if (i2c_write((unsigned char)reg)) {
-    xprintf("mcp: write reg addr %d failed\n", reg);
+   xprintf("mcp: write reg addr %d failed\n", reg);
     goto done;
   }
 
   success = i2c_write(val) == 0;
   if (!success) {
-    xprintf("mcp: write reg addr %d val = %d failed\n", reg, val);
+   xprintf("mcp: write reg addr %d val = %d failed\n", reg, val);
   }
 done:
   i2c_stop();
@@ -112,14 +115,23 @@ done:
 
 bool iota_mcp23017_init(void) {
   initialized = false;
+  // xprintf("XPRINTF mcp: iota_mcp23017_init\n");
+  _delay_ms(1000);
+  xprintf("xprintf mcp: iota_mcp23017_init\n");
+  _delay_ms(1000);
+  //xprintf("PRINT mcp: iota_mcp23017_init\n");
 
   // Set all the pins as inputs
+  // 0 = output
+  // 1 = input
   set_reg(IODirectionA, 0xff);
   set_reg(IODirectionB, 0xff);
 
   // Read key presses (logic low) as 0s
-  set_reg(InputPolarityB, 0x00);
-  set_reg(InputPolarityA, 0x00);
+  // set_reg(InputPolarityB, 0x00);
+  // set_reg(InputPolarityA, 0x00);
+  set_reg(InputPolarityA, 0xFF);
+  set_reg(InputPolarityB, 0xFF);
 
   // Turn on internal pull-ups; we're adding our own
   set_reg(PullUpA, 0xff);
@@ -132,9 +144,11 @@ bool iota_mcp23017_init(void) {
   initialized = true;
 done:
   if (!initialized) {
-    dprint("failed to init mcp\n");
+   xprintf("failed to init mcp\n");
+  _delay_ms(1000);
   } else {
-    dprint("mcp initialized!\n");
+   xprintf("mcp initialized!\n");
+  _delay_ms(1000);
   }
   return initialized;
 }
@@ -155,16 +169,19 @@ uint16_t iota_mcp23017_read(void) {
   uint16_t pins = 0;
 
   if (!initialized) {
+    xprintf("!!!! ERROR mcp i2c not initialized @ reinit_counter=%u !!!!\n", reinit_counter);
+    _delay_ms(1000);
     return 0;
   }
 
 #ifdef USE_LUFA_TWI
   uint8_t addr = IOPortA;
   uint8_t buf[2];
-  uint8_t result = TWI_ReadPacket(i2cAddress << 1, i2cTimeout, &addr,
-                                  sizeof(addr), buf, sizeof(buf));
+  uint8_t result = TWI_ReadPacket(i2cAddress << 1, i2cTimeout, &addr, sizeof(addr), buf, sizeof(buf));
+  xprintf("buf[0]: %08b\nbuf[1]: %08b\n", buf[0], buf[1]);
   if (result) {
     xprintf("mcp: read pins failed: %s\n", twi_err_str(result));
+    _delay_ms(1000);
     initialized = false;
     return 0;
   }
@@ -173,16 +190,19 @@ uint16_t iota_mcp23017_read(void) {
 #else
 
   if (i2c_start_write(i2cAddress)) {
+    xprintf("!!!!****(mcp)i2c_start_write failed (address=0x%X), will need re-init****!!!!\n", i2cAddress);
     initialized = false;
     goto done;
   }
 
   if (i2c_write(IOPortA)) {
+    xprintf("!!!!****(mcp)i2c_write failed (reg addr=0x%X), will need re-init****!!!!\n", IOPortA);
     initialized = false;
     goto done;
   }
 
   if (i2c_start_read(i2cAddress)) {
+    xprintf("!!!!****(mcp)i2c_start_read failed (address=0x%X), will need re-init****!!!!\n", i2cAddress);
     initialized = false;
     goto done;
   }
@@ -196,7 +216,7 @@ done:
   i2c_stop();
 
   if (!initialized) {
-    dprint("failed to read mcp, will re-init\n");
+    xprintf("failed to read mcp, will re-init\n");
     return 0;
   }
 #endif

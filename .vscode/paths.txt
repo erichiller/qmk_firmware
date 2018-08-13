@@ -1,0 +1,37 @@
+
+                // "${workspaceFolder}\\lib\\**",
+                // "${workspaceFolder}\\quantum\\**",
+                // "${workspaceFolder}\\tmk_core\\**",
+                // "${workspaceFolder}\\drivers\\**",
+                // "${workspaceFolder}\\keyboards\\eh2\\**",
+
+
+
+
+-DINTERRUPT_CONTROL_ENDPOINT -DBOOTLOADER_SIZE=4096 -DKEYBOARD_eh2_avr -DBOOTLOADER_CATERINA -DBOOTLOADER_SIZE=4096 -DMAGIC_ENABLE -DEXTRAKEY_ENABLE -DCONSOLE_ENABLE -DCOMMAND_ENABLE -DF_USB=8000000UL -DARCH=ARCH_AVR8 -DUSB_DEVICE_ONLY -DUSE_FLASH_DESCRIPTORS -DUSE_STATIC_OPTIONS="(USB_DEVICE_OPT_FULLSPEED | USB_OPT_REG_ENABLED | USB_OPT_AUTO_PLL)" -DFIXED_CONTROL_ENDPOINT_SIZE=8 -DFIXED_CONTROL_ENDPOINT_SIZE=8 -DFIXED_NUM_CONFIGURATIONS=1 -DPROTOCOL_LUFA -DF_CPU=8000000UL  -DQMK_KEYBOARD=\"eh2/avr\" -DQMK_KEYBOARD_H=\"eh2.h\" -DQMK_KEYBOARD_CONFIG_H=\"keyboards/eh2/avr/config.h\" -DQMK_KEYMAP=\"default\" -DQMK_KEYMAP_H=\"default.h\" -DQMK_KEYMAP_CONFIG_H=\"keyboards/eh2/keymaps/default/config.h\" -DQMK_SUBPROJECT -DQMK_SUBPROJECT_H -DQMK_SUBPROJECT_CONFIG_H
+
+
+
+            "compilerPath": "${workspaceFolder}\\..\\msys\\home\\eric\\qmk_utils\\avr8-gnu-toolchain\\bin\\avr-gcc-4.9.2.exe",
+                "${workspaceFolder}/../msys/home/eric/qmk_utils/avr8-gnu-toolchain/**",
+
+                "${workspaceFolder}/keyboards/eh2/config.h",
+                "${workspaceFolder}/keyboards/eh2/keymaps/default/config.h",
+                "${workspaceFolder}/tmk_core/protocol/lufa/**",
+                "${workspaceFolder}/drivers/avr/**",
+                "${workspaceFolder}/quantum/keymap_extras/**",
+                "${workspaceFolder}/quantum/audio/**",
+                "${workspaceFolder}/quantum/process_keycode/**",
+                "${workspaceFolder}/quantum/api/**",
+                "${workspaceFolder}/quantum/split_common/**",
+                "${workspaceFolder}/quantum/serial_link/**",
+                "${workspaceFolder}/**",
+                "${workspaceFolder}/keyboards/eh2/avr/**",
+                "${workspaceFolder}/keyboards/eh2/keymaps/default/**",
+                "${workspaceFolder}/../msys/home/eric/qmk_utils/avr8-gnu-toolchain/avr/**",
+                "${workspaceFolder}/tmk_core/*",
+
+
+
+
+$ echo | /home/Administrator/qmk_utils/avr8-gnu-toolchain/bin/avr-gcc-4.9.2 -Wp,-v -x c++ - -fsyntax-only
