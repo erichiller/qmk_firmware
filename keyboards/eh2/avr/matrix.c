@@ -209,9 +209,9 @@ static bool read_cols_on_row(matrix_row_t current_matrix[], uint8_t current_row)
 	matrix_row_t last_row_value = current_matrix[current_row];
 	matrix_row_t mcp_pin_result;
 
-	if (current_row !=0){
-		return false;
-	}
+	// if (current_row !=0){
+	// 	return false;
+	// }
 
 	// Select row and wait for row selecton to stabilize
 	select_row(current_row);

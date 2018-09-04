@@ -56,12 +56,17 @@ SRC = matrix.c mcp23017.c twimaster.c
 # Build Options
 #   change yes to no to disable
 #
-ADAFRUIT_BLE_ENABLE ?= no   # Enable Bluetooth with the Adafruit BLE boards
+# ADAFRUIT_BLE_ENABLE ?= no   # Enable Bluetooth with the Adafruit BLE boards
+# BLUETOOTH_ENABLE = yes
+# ADAFRUIT_BLE_ENABLE ?= yes   # Enable Bluetooth with the Adafruit BLE boards
+BLUETOOTH = AdafruitBLE
+
 AUDIO_ENABLE ?= no           # Audio output on port C6
 BACKLIGHT_ENABLE ?= no       # Enable keyboard backlight functionality on B7 by default
 BOOTMAGIC_ENABLE ?= no      # Virtual DIP switch configuration(+1000)
 COMMAND_ENABLE ?= no        # Commands for debug and configuration
-CONSOLE_ENABLE ?= yes        # Console for debug(+400)
+#CONSOLE_ENABLE ?= yes        # Console for debug(+400)
+CONSOLE_ENABLE ?= no        # Console for debug(+400)
 CUSTOM_MATRIX = yes          # We have a custom matrix
 EXTRAKEY_ENABLE ?= no       # Audio control and System control(+450)
 MIDI_ENABLE ?= no            # MIDI controls

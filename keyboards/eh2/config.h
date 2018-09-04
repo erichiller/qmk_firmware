@@ -41,6 +41,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #undef NO_DEBUG
 #undef NO_PRINT
+#define NO_DEBUG
+#define NO_PRINT
 
 
 // #define RGB_DI_PIN C7 // Pin 13 on the Feather board
