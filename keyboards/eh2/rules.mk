@@ -1,0 +1,2 @@
+DEFAULT_FOLDER = eh2/avr
+# SUBPROJECT_DEFAULT = avr
