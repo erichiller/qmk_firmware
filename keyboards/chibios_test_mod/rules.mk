@@ -8,7 +8,7 @@ NKRO_ENABLE = yes	    # USB Nkey Rollover
 CUSTOM_MATRIX = yes # Custom matrix file
 
 # DEFAULT_FOLDER = chibios_test/stm32_f072_onekey
-DEFAULT_FOLDER = chibios_test/teensy_3_2_onekey_b
+DEFAULT_FOLDER = chibios_test_mod/teensy_3_2_onekey_mod
 
 
 DEBUG_ENABLE=yes

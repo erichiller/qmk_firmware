@@ -91,6 +91,7 @@ struct pal_port_t {
 // static const uint8_t row_pins[MATRIX_ROWS] = {F7, F6, F5, F4, F1};
 struct pal_port_t row_pins[MATRIX_ROWS] = { PIN_19, PIN_20, PIN_21, PIN_22, PIN_23, PIN_29 };
 struct pal_port_t col_pins[MATRIX_COLS] = {
+  PIN_0,
   PIN_1,
   PIN_2,
   PIN_3,

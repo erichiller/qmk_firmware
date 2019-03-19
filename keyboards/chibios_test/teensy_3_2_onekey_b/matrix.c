@@ -59,9 +59,12 @@ struct pal_port_t {
   uint8_t     pin  ;
 };
 
-///////////////////////// TRY STRUCT TO SEE IF THIS BROKE IT
+// cols
 #define PIN_0           { .port=TEENSY_PIN0_IOPORT, .pin=TEENSY_PIN0 }
 
+#define PIN_17          { .port=TEENSY_PIN17_IOPORT, .pin=TEENSY_PIN17 }
+#define PIN_18          { .port=TEENSY_PIN18_IOPORT, .pin=TEENSY_PIN18 }
+// rows
 #define PIN_19          { .port=TEENSY_PIN19_IOPORT, .pin=TEENSY_PIN19 }
 
 
@@ -164,15 +167,81 @@ void matrix_print(void)
  */
 static void  init_cols(void)
 {
-  print("init_cols");
+  print("init_cols print");
+  debug("init_cols print");
     // internal pull-up
     palSetPadMode(TEENSY_PIN18_IOPORT, TEENSY_PIN18, PAL_MODE_INPUT_PULLUP);
+    palSetPadMode(TEENSY_PIN17_IOPORT, TEENSY_PIN17, PAL_MODE_INPUT_PULLUP);
+}
+
+bool print_details = true;
+
+static void print_pad_value(matrix_row_t pin_value, uint8_t pin_row, uint8_t pin_col){
+    dprintf("**************************************** row: %u ; col: %u ****************************************\n", pin_row, pin_col);
+    dprintf("sizeof(matrix_row_t) = %d (%d)\n", sizeof(matrix_row_t), (sizeof(matrix_row_t)*8));
+    dprintf("matrix[%u] | row: %u col: %u  - hex: %X ; dec: %d ; unsigned: %u\n", pin_row, pin_row, pin_col, matrix[pin_row], matrix[pin_row], matrix[pin_row]);
+
+    dprintf("vals | row: %u col: %u  - PAL_HIGH: %u ; PAL_LOW: %u ; PIN==HIGH ?: %u\n", pin_row, pin_col, PAL_HIGH, PAL_LOW, (pin_value==PAL_HIGH));
+
+    dprintf("debug_enable = %d\n", debug_enable);
+    dprintf("raw | row: %u col: %u  - hex: %X ; dec: %d ; unsigned: %u\n", pin_row, pin_col, pin_value, pin_value, pin_value);
+
+    dprintf("raw | row: %d col: %d - bin8 : [", pin_row, pin_col);
+    debug_bin8(pin_value);
+    dprint("]\n");
+
+    dprintf("raw | row: %d col: %d - bin16: [", pin_row, pin_col);
+    debug_bin16(pin_value);
+    dprint("]\n");
+
+    dprintf("raw | row: %d col: %d - bin32: [", pin_row, pin_col);
+    debug_bin32(pin_value);
+    dprint("]\n");
+
+    dprintf("raw | row: %d col: %d - bin8 reversed : [", pin_row, pin_col);
+    debug_bin_reverse8(pin_value);
+    dprint("]\n");
+
+
+    dprintf("shift_0: %d, %u, %X\n", ( pin_value ? 0 : (1<<0)), ( pin_value ? 0 : (1<<0)), ( pin_value ? 0 : (1<<0)) );
+    print("shift_0 | debug_bin8 [");
+    debug_bin8( (pin_value ? 0 : (1<<0)) );
+    print("]\n");
+
+
+    dprintf("shift_1: %d, %u, %X\n", ( pin_value ? 0 : (1<<1)), ( pin_value ? 0 : (1<<1)), ( pin_value ? 0 : (1<<1)) );
+    print("shift_1 | debug_bin8: [");
+    debug_bin8( (pin_value ? 0 : (1<<1)) );
+    print("]\n");
+
+    if ( print_details ){
+      palSetPadMode(TEENSY_PIN16_IOPORT, TEENSY_PIN16, PAL_MODE_INPUT_PULLUP);
+      matrix_row_t p16val = palReadPad(TEENSY_PIN16_IOPORT, TEENSY_PIN16);
+      dprintf("read p16 after input_pullup: %d, %u, %X\n",  p16val, p16val, p16val);
+      palSetPadMode(TEENSY_PIN19_IOPORT, TEENSY_PIN19, PAL_MODE_OUTPUT_PUSHPULL);
+      palClearPad(TEENSY_PIN19_IOPORT, TEENSY_PIN19);
+      p16val = palReadPad(TEENSY_PIN16_IOPORT, TEENSY_PIN16);
+      dprintf("read p16 after row output pushpull: %d, %u, %X\n",  p16val, p16val, p16val);
+      print_details = false;
+    }
+    dprintf("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ row: %u ; col: %u ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n", pin_row, pin_col);
 }
 
 /* Returns status of switches(1:on, 0:off) */
 static matrix_row_t read_cols(void)
 {
-    return ((palReadPad(TEENSY_PIN18_IOPORT, TEENSY_PIN18)==PAL_HIGH) ? 0 : (1<<0));
+  matrix_row_t pin_val = palReadPad(TEENSY_PIN18_IOPORT, TEENSY_PIN18);
+  matrix_row_t in_row = ((pin_val==PAL_HIGH) ? 0 : (1<<0));
+  if( in_row != 0 ){
+    print_pad_value(pin_val, 0, 18);
+  }
+  pin_val = (palReadPad(TEENSY_PIN17_IOPORT, TEENSY_PIN17)==PAL_HIGH);
+  matrix_row_t in_row_col_17 = (pin_val==PAL_HIGH);
+  if( ( in_row_col_17 ? 0 : (1<<0)) != 0 ){
+    print_pad_value(pin_val, 0, 17);
+    // wait_ms(500);
+  }
+  return in_row;
     // | ((palReadPad(...)==PAL_HIGH) ? 0 : (1<<1))
 }
 
@@ -194,6 +263,10 @@ static void select_row(uint8_t row)
         case 0:
             palSetPadMode(TEENSY_PIN19_IOPORT, TEENSY_PIN19, PAL_MODE_OUTPUT_PUSHPULL);
             palClearPad(TEENSY_PIN19_IOPORT, TEENSY_PIN19);
+            break;
+        case 1:
+            palSetPadMode(TEENSY_PIN20_IOPORT, TEENSY_PIN20, PAL_MODE_OUTPUT_PUSHPULL);
+            palClearPad(TEENSY_PIN20_IOPORT, TEENSY_PIN20);
             break;
     }
 }
