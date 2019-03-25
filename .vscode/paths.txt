@@ -35,3 +35,6 @@
 
 
 $ echo | /home/Administrator/qmk_utils/avr8-gnu-toolchain/bin/avr-gcc-4.9.2 -Wp,-v -x c++ - -fsyntax-only
+
+
+[c_cpp_properties.json for QMK](https://gist.github.com/drashna/48e2c49ce877be592a1650f91f8473e8#file-c_cpp_properties-json)

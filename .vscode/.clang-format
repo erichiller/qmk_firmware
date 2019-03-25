@@ -48,17 +48,17 @@ BinPackParameters: false
 
 # only if BreakBeforeBraces is set to Custom
 BraceWrapping:
-#   AfterClass:      false
+  #   AfterClass:      false
   # AfterControlStatement: true
-#   AfterEnum:       false
-#   AfterFunction:   true
-#   AfterNamespace:  false
-#   AfterObjCDeclaration: false
-  AfterStruct:     true
-  AfterUnion:      true
+  #   AfterEnum:       false
+  #   AfterFunction:   true
+  #   AfterNamespace:  false
+  #   AfterObjCDeclaration: false
+  AfterStruct: true
+  AfterUnion: true
   # AfterExternBlock: false
 #   BeforeCatch:     false
-  # BeforeElse:      true
+# BeforeElse:      true
 #   IndentBraces:    false
 #   SplitEmptyFunction: true
 #   SplitEmptyRecord: true
@@ -142,7 +142,6 @@ SpaceBeforeParens: Never
 # try at least , not 100% sold
 SpaceInEmptyParentheses: true
 
-
 SpacesBeforeTrailingComments: 4
 
 SpacesInAngles: false
@@ -155,7 +154,7 @@ SpacesInParentheses: true
 
 SpacesInSquareBrackets: false
 
-Standard:        Cpp11
+Standard: Cpp11
 
 # It did not inherit vscode's settings
 TabWidth: 4

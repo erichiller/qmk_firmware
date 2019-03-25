@@ -45,6 +45,7 @@ write_led_page(5, led_numpad, 16);
 ```
 
 Remaining led control is done through the led mailbox using these message types:
+
 - **SET_FULL_ROW** (3 bytes) - message type, 8-bit mask, and row#. Sets all leds on one pin per the bit mask.
 - **OFF_LED, ON_LED, TOGGLE_LED** (3 bytes) - message type, led address, and page#. Off/on/toggle specific led.
 - **BLINK_OFF_LED, BLINK_ON_LED, BLINK_TOGGLE_LED** (3 bytes) - message type, led address, and page#. Set blink Off/on/toggle for specific led.
@@ -57,15 +58,19 @@ Remaining led control is done through the led mailbox using these message types:
 - **STEP_BRIGHTNESS** (2 bytes) - message type, and step up (1) or step down (0). Increase or decrease led brightness.
 
 ## Sending messages in Keymap.c
+
 Sending an action to the led mailbox is done using chMBPost:
-```
+
+```c
 chMBPost(&led_mailbox, message, timeout);
 ```
+
 - &led_mailbox - pointer to led mailbox
 - message - up to 4 bytes but most messages use only 2. First byte (LSB) is the message type, the remaining three bytes are the message to process.
 - timeout is TIME_IMMEDIATE
 
 An example:
+
 ```c
 //set the message to be sent. First byte (LSB) is the message type, and second is the led address
 msg=(42 << 8) | ON_LED;
@@ -75,12 +80,14 @@ chMBPost(&led_mailbox, msg, TIME_IMMEDIATE);
 ```
 
 Another:
+
 ```c
 msg=(46 << 8) | BLINK_TOGGLE_LED;
 chMBPost(&led_mailbox, msg, TIME_IMMEDIATE);
 ```
 
 Finally, SET_FULL_ROW requires an extra byte with row information in the message so sending this message looks like:
+
 ```c
 msg=(row<<16) | (led_pin_byte << 8) | SET_FULL_ROW;
 chMBPost(&led_mailbox, msg, TIME_IMMEDIATE);

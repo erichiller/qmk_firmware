@@ -43,3 +43,9 @@ MCU  = cortex-m4
 # ARM version, CORTEX-M0/M1 are 6, CORTEX-M3/M4/M7 are 7
 # I.e. 6 for Teensy LC; 7 for Teensy 3.x
 ARMV = 7
+
+LEADER_ENABLE = yes
+
+
+
+# LED_MATRIX_ENABLE = IS31FL3731

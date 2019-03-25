@@ -29,20 +29,43 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define DESCRIPTION QMK keyboard firmware test for ChibiOS
 
 /* key matrix size */
-#define MATRIX_ROWS 1
-#define MATRIX_COLS 1
+// #define MATRIX_ROWS 6
+// #define MATRIX_COLS 19
+#define MATRIX_ROWS 6
+#define MATRIX_COLS 19
 #define DIODE_DIRECTION COL2ROW
 
 /* define if matrix has ghost */
 //#define MATRIX_HAS_GHOST
 
 /* Set 0 if debouncing isn't needed */
-#define DEBOUNCE    5
+#define DEBOUNCE    1
+
+
+
+/*
+ * LED matrix , such issi drivers
+ */
+// #define LED_MATRIX
+
+#ifdef LED_MATRIX
+#define HAL_USE_I2C TRUE
+
+#define LED_DRIVER_COUNT 1
+#define LED_DRIVER_LED_COUNT 25
+#define LED_DRIVER_ADDR_1 
+#endif
+
+
 
 /* Mechanical locking support. Use KC_LCAP, KC_LNUM or KC_LSCR instead in keymap */
-#define LOCKING_SUPPORT_ENABLE
+// #define LOCKING_SUPPORT_ENABLE
 /* Locking resynchronize hack */
-#define LOCKING_RESYNC_ENABLE
+// #define LOCKING_RESYNC_ENABLE
+
+
+
+
 
 /*
  * Feature disable options
