@@ -43,18 +43,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
 
+#define BACKLIGHT_LEVELS 3
+
+#define LED_BRIGHTNESS_LO       100
+#define LED_BRIGHTNESS_HI       255
+
 /*
  * LED matrix , such issi drivers
  */
-// #define LED_MATRIX
-
-#ifdef LED_MATRIX
-#define HAL_USE_I2C TRUE
-
-#define LED_DRIVER_COUNT 1
-#define LED_DRIVER_LED_COUNT 25
-#define LED_DRIVER_ADDR_1 
-#endif
 
 
 
