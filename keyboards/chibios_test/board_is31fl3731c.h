@@ -143,7 +143,7 @@ static GFXINLINE void set_hardware_shutdown(GDisplay* g, bool shutdown) {
 }
 
 static GFXINLINE void write_data(GDisplay *g, uint8_t* data, uint16_t length) {
-    printf("board_is31fl373c.h write_data\n\tdata=%x\n\tdata*x=%x\n\tlength=%u\n", data, *data, length);
+    printf("board_is31fl373c.h write_data\n\tdata=%x\n\tdata*x=%0x\n\tlength=%u\n", data, *data, length);
 // #ifdef LED_MATRIX_XXX
 	(void) g;
 	i2cMasterTransmitTimeout(&I2CD_, IS31_ADDR_DEFAULT, data, length, 0, 0, US2ST(IS31_TIMEOUT));
