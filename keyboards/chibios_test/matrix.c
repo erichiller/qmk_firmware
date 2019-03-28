@@ -117,11 +117,15 @@ struct pal_port_t {
   { .port = TEENSY_PIN27_IOPORT, .pin = TEENSY_PIN27 }
 #define PIN_29                                                                 \
   { .port = TEENSY_PIN29_IOPORT, .pin = TEENSY_PIN29 }
+#define PIN_30                                                                 \
+  { .port = TEENSY_PIN30_IOPORT, .pin = TEENSY_PIN30 }
+#define PIN_31                                                                 \
+  { .port = TEENSY_PIN31_IOPORT, .pin = TEENSY_PIN31 }
 
 // leftmost is start
 // PIN_18 is ESCAPE
-struct pal_port_t col_pins[MATRIX_COLS] = { PIN_18, PIN_17, PIN_16, PIN_15, PIN_14, PIN_26, PIN_12, PIN_11, PIN_10, PIN_9, PIN_8, PIN_7, PIN_6, PIN_5, PIN_4, PIN_3, PIN_2, PIN_1, PIN_0 };
-struct pal_port_t row_pins[MATRIX_ROWS] = { PIN_19, PIN_20, PIN_21, PIN_22, PIN_23, PIN_27 };
+struct pal_port_t col_pins[MATRIX_COLS] = { PIN_30, PIN_17, PIN_16, PIN_15, PIN_14, PIN_26, PIN_12, PIN_11, PIN_10, PIN_9, PIN_8, PIN_7, PIN_6, PIN_5, PIN_4, PIN_3, PIN_2, PIN_1, PIN_0 };
+struct pal_port_t row_pins[MATRIX_ROWS] = { PIN_31, PIN_20, PIN_21, PIN_22, PIN_23, PIN_27 };
 
 inline uint8_t matrix_rows(void) { return MATRIX_ROWS; }
 

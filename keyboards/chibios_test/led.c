@@ -22,13 +22,18 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // #include "led_controller.h"
 // #include "quantum.h"
 
+#ifdef LED_MATRIX_XXX
 #include "usb_main.h"
+#endif
 
 #include "hal.h"
 #include "led.h"
 
+#include "print.h"
+
 
 void led_set(uint8_t usb_led) {
+    print("led.c led_set");
     if (usb_led & (1<<USB_LED_CAPS_LOCK)) {
         // output high
         palSetPadMode(TEENSY_PIN13_IOPORT, TEENSY_PIN13, PAL_MODE_OUTPUT_PUSHPULL);

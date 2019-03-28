@@ -56,21 +56,28 @@
  * for Teensy 3.x */
 #define KINETIS_USB_USB0_IRQ_PRIORITY         5
 
+#define LED_MATRIX
 
 
 #ifdef LED_MATRIX
 
 #define HAL_USE_I2C             TRUE
-#define KINETIS_I2C_USE_I2C1    TRUE
-#define KINETIS_I2C_I2C1_PRIORITY           4
 
 // #define KINETIS_I2C_USE_I2C1    TRUE
+// #define KINETIS_I2C_I2C1_PRIORITY           4
+#define KINETIS_I2C_USE_I2C0                TRUE
+#define KINETIS_I2C_I2C0_PRIORITY           4
+
 
 // #define LED_DRIVER_ADDR_1       0x74
 // // I2C0
-#define I2C1_BANK   TEENSY_PIN29_IOPORT
-#define I2C1_SCL    TEENSY_PIN29
-#define I2C1_SDA    TEENSY_PIN30
+// #define I2C1_BANK   TEENSY_PIN29_IOPORT
+// #define I2C1_SCL    TEENSY_PIN29
+// #define I2C1_SDA    TEENSY_PIN30
+
+
+// #undef KINETIS_I2C_USE_I2C0
+// #define KINETIS_I2C_I2C0_PRIORITY           12
 
 // #define LED_DRIVER_COUNT        1
 // #define LED_DRIVER_LED_COUNT    144

@@ -63,17 +63,16 @@ ARMV = 7
 ## (Note that for BOOTMAGIC on Teensy LC you have to use a custom .ld script.)
 MOUSEKEY_ENABLE = yes	# Mouse keys
 EXTRAKEY_ENABLE = yes	# Audio control and System control
-CONSOLE_ENABLE = yes	# Console for debug
 COMMAND_ENABLE = yes    # Commands for debug and configuration
 # SLEEP_LED_ENABLE = yes  # Breathing sleep LED during USB suspend
 NKRO_ENABLE = yes	    # USB Nkey Rollover
 CUSTOM_MATRIX = yes # Custom matrix file
 
-# BACKLIGHT_ENABLE = yes
-# VISUALIZER_ENABLE = yes
-# LED_DRIVER = is31fl3731c
-# LED_WIDTH = 16
-# LED_HEIGHT = 5
+BACKLIGHT_ENABLE = yes
+VISUALIZER_ENABLE = yes
+LED_DRIVER = is31fl3731c
+LED_WIDTH = 16
+LED_HEIGHT = 5
 
 DEBUG_ENABLE=yes
 CONSOLE_ENABLE = yes	# Console for debug

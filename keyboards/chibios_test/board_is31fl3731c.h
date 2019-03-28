@@ -18,29 +18,37 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef _GDISP_LLD_BOARD_H
 #define _GDISP_LLD_BOARD_H
 
-#ifdef KINETIS_I2C_USE_I2C1
-#define I2CD_ I2CD2
-#pragma message "running DRIVER 1"
+#pragma message(VAR_NAME_VALUE(KINETIS_I2C_USE_I2C1))
+#if KINETIS_I2C_USE_I2C1 == TRUE
+    #define I2CD_ I2CD2
     #pragma message "running DRIVER 1"
     #ifdef I2C1_BANK
         #pragma message "running I2C_BANK I2C1_BANK"
+        #pragma message(VAR_NAME_VALUE(I2C1_BANK))
+        #pragma message(VAR_NAME_VALUE(TEENSY_PIN29_IOPORT))
         #define I2C_BANK I2C1_BANK
     #endif
     #ifdef I2C1_SCL
         #pragma message "running I2C_SCL I2C1_SCL"
+        #pragma message(VAR_NAME_VALUE(I2C1_SCL))
+        #pragma message(VAR_NAME_VALUE(TEENSY_PIN29))
         #define I2C_SCL I2C1_SCL
     #endif
     #ifdef I2C1_SDA
         #pragma message "running I2C_SDA I2C1_SDA"
+        #pragma message(VAR_NAME_VALUE(I2C1_SDA))
+        #pragma message(VAR_NAME_VALUE(TEENSY_PIN30))
         #define I2C_SDA I2C1_SDA
     #endif
 #else
-#define I2CD_ I2DC1
+#define I2CD_ I2CD1
 #define I2C_BANK GPIOB
 #define I2C_SCL 16
 #define I2C_SDA 1
 #pragma message "running DEFAULT DRIVER 0"
 #endif
+
+#include "../../../../tmk_core/common/print.h"
 
 static const I2CConfig i2ccfg = {
   400000 // clock speed (Hz); 400kHz max for IS31
@@ -83,6 +91,8 @@ static const uint8_t led_mapping[GDISP_SCREEN_HEIGHT][GDISP_SCREEN_WIDTH] = {
 #define IS31_TIMEOUT 5000
 
 static GFXINLINE void init_board(GDisplay *g) {
+    println("board_is31fl373c.h init_board");
+// #ifdef LED_MATRIX_XXX
     (void) g;
     /* I2C pins */
     palSetPadMode(I2C_BANK, I2C_SCL, PAL_MODE_ALTERNATIVE_2); //I2C0 SCL = GPIOB PIN 16 = PTB0/I2C0/SCL
@@ -95,24 +105,33 @@ static GFXINLINE void init_board(GDisplay *g) {
     I2CD_.i2c->C2 |= I2Cx_C2_HDRS;
     // try glitch fixing (from kiibohd)
     I2CD_.i2c->FLT = 4;
+    
+    chThdSleepMilliseconds(10);
+// #endif
 }
 
 static GFXINLINE void post_init_board(GDisplay *g) {
+    println("board_is31fl373c.h post_init_board");
 	(void) g;
 }
 
 static GFXINLINE const uint8_t* get_led_mask(GDisplay* g) {
+    println("board_is31fl373c.h get_led_mask");
     (void) g;
     return led_mask;
 }
 
 static GFXINLINE uint8_t get_led_address(GDisplay* g, uint16_t x, uint16_t y)
 {
+    print("g");
+    // println("board_is31fl373c.h get_led_address");
     (void) g;
     return led_mapping[y][x];
 }
 
 static GFXINLINE void set_hardware_shutdown(GDisplay* g, bool shutdown) {
+    println("board_is31fl373c.h set_hardware_shutdown");
+// #ifdef LED_MATRIX_XXX
     (void) g;
     if(!shutdown) {
         palSetPad(I2C_BANK, I2C_SCL);
@@ -120,11 +139,15 @@ static GFXINLINE void set_hardware_shutdown(GDisplay* g, bool shutdown) {
     else {
         palClearPad(I2C_BANK, I2C_SCL);
     }
+// #endif
 }
 
 static GFXINLINE void write_data(GDisplay *g, uint8_t* data, uint16_t length) {
+    printf("board_is31fl373c.h write_data\n\tdata=%x\n\tdata*x=%x\n\tlength=%u\n", data, *data, length);
+// #ifdef LED_MATRIX_XXX
 	(void) g;
 	i2cMasterTransmitTimeout(&I2CD_, IS31_ADDR_DEFAULT, data, length, 0, 0, US2ST(IS31_TIMEOUT));
+// #endif
 }
 
 #endif /* _GDISP_LLD_BOARD_H */
