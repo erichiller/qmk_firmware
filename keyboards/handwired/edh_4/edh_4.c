@@ -19,7 +19,6 @@ void matrix_scan_kb(void) {
 // uint8_t last
 uint8_t *process_led_matrix_output;
 uint8_t last_led = 0;
-int intefier = 0;
 
 bool process_record_kb(uint16_t keycode, keyrecord_t *record) {
 	// put your per-action keyboard code here
@@ -35,12 +34,22 @@ bool process_record_kb(uint16_t keycode, keyrecord_t *record) {
 	xprintf(" [0x%X] (%u)\n", record->event.key.col, record->event.key.col);
 	print("<----\n");
 
+	process_led_matrix_output = get_process_led_matrix( keycode, record);
+    led_matrix_effect_splash(keycode, record);
+    xprintf("process_record_kb() process_led_matrix returned process_led_matrix_output=\n");
+    for ( uint8_t i = 0; i < 8 ; i++){
+        xprintf("process_led_matrix_output[%u]: ", i);
+        print_bin8(process_led_matrix_output[i]);
+        xprintf(" (%u)\n", process_led_matrix_output[i]);
+    }
+
     // xprintf("process_record_kb |--->| process_led_matrix\n");
     // led_matrix_set_index_value_all(128);
 
 
 	return process_record_user(keycode, record);
 }
+
 
 void led_set_kb(uint8_t usb_led) {
 	// put your keyboard LED indicator (ex: Caps Lock LED) toggling code here
@@ -55,13 +64,6 @@ void led_set_kb(uint8_t usb_led) {
 void led_matrix_indicators_kb(void) {
     
 
-	process_led_matrix_output = get_process_led_matrix( keycode, record);
-    xprintf("process_record_kb() process_led_matrix returned process_led_matrix_output=\n");
-    for ( uint8_t i = 0; i < 8 ; i++){
-        xprintf("process_led_matrix_output[%u]: ", i);
-        print_bin8(process_led_matrix_output[i]);
-        xprintf(" (%u)\n", process_led_matrix_output[i]);
-    }
     
     if( process_led_matrix_output[0] != last_led){
         xprintf("\n---->\nled_matrix_indicators_kb : CHANGE DETECTED ; was %u now %u \n", last_led, process_led_matrix_output[0]);
@@ -106,6 +108,11 @@ const is31_led g_is31_leds[LED_DRIVER_LED_COUNT] = {
     {0, C1_15},
     {0, C1_16},
 
+    {0, C7_1},
+    {0, C7_2},
+    {0, C7_3},
+
+/***** ROW 2 *****/
     {0, C2_1},
     {0, C2_2},
     {0, C2_3},
@@ -124,6 +131,11 @@ const is31_led g_is31_leds[LED_DRIVER_LED_COUNT] = {
     {0, C2_15},
     {0, C2_16},
 
+    {0, C7_4},
+    {0, C7_5},
+    {0, C7_6},
+
+/***** ROW 3 *****/
     {0, C3_1},
     {0, C3_2},
     {0, C3_3},
@@ -141,6 +153,12 @@ const is31_led g_is31_leds[LED_DRIVER_LED_COUNT] = {
     {0, C3_14},
     {0, C3_15},
     {0, C3_16},
+
+    {0, C7_7},
+    {0, C7_8},
+    {0, C7_9},
+
+/***** ROW 4 *****/
 
     {0, C4_1},
     {0, C4_2},
@@ -160,6 +178,12 @@ const is31_led g_is31_leds[LED_DRIVER_LED_COUNT] = {
     {0, C4_15},
     {0, C4_16},
 
+    {0, C7_10},
+    {0, C7_11},
+    {0, C7_12},
+
+/***** ROW 5 *****/
+
     {0, C5_1},
     {0, C5_2},
     {0, C5_3},
@@ -177,6 +201,12 @@ const is31_led g_is31_leds[LED_DRIVER_LED_COUNT] = {
     {0, C5_14},
     {0, C5_15},
     {0, C5_16},
+
+    {0, C7_13},
+    {0, C7_14},
+    {0, C7_15},
+
+/***** ROW 6 *****/
 
     {0, C6_1},
     {0, C6_2},
@@ -196,59 +226,11 @@ const is31_led g_is31_leds[LED_DRIVER_LED_COUNT] = {
     {0, C6_15},
     {0, C6_16},
 
-    {0, C7_1},
-    {0, C7_2},
-    {0, C7_3},
-    {0, C7_4},
-    {0, C7_5},
-    {0, C7_6},
-    {0, C7_7},
-    {0, C7_8},
-
-    {0, C7_9},
-    {0, C7_10},
-    {0, C7_11},
-    {0, C7_12},
-    {0, C7_13},
-    {0, C7_14},
-    {0, C7_15},
-    {0, C7_16},
-
+    
     {0, C8_1},
     {0, C8_2},
     {0, C8_3},
-    {0, C8_4},
-    {0, C8_5},
-    {0, C8_6},
-    {0, C8_7},
-    {0, C8_8},
 
-    {0, C8_9},
-    {0, C8_10},
-    {0, C8_11},
-    {0, C8_12},
-    {0, C8_13},
-    {0, C8_14},
-    {0, C8_15},
-    {0, C8_16},
-
-    {0, C9_1},
-    {0, C9_2},
-    {0, C9_3},
-    {0, C9_4},
-    {0, C9_5},
-    {0, C9_6},
-    {0, C9_7},
-    {0, C9_8},
-
-    {0, C9_9},
-    {0, C9_10},
-    {0, C9_11},
-    {0, C9_12},
-    {0, C9_13},
-    {0, C9_14},
-    {0, C9_15},
-    {0, C9_16},
 };
 
 
@@ -411,37 +393,36 @@ const led_matrix g_leds[LED_DRIVER_LED_COUNT] = {
 
 
     
-    {{7|(18<<3)},   {0, LED_MATRIX_Y(5) }, 1},
-    
-    {{7|(18<<3)},   {0, LED_MATRIX_Y(5) }, 1},
-    {{7|(18<<3)},   {0, LED_MATRIX_Y(5) }, 1},
-    {{7|(18<<3)},   {0, LED_MATRIX_Y(5) }, 1},
-    {{7|(18<<3)},   {0, LED_MATRIX_Y(5) }, 1},
-    {{7|(18<<3)},   {0, LED_MATRIX_Y(5) }, 1},
-    {{7|(18<<3)},   {0, LED_MATRIX_Y(5) }, 1},
-    {{7|(18<<3)},   {0, LED_MATRIX_Y(5) }, 1},
-    {{7|(18<<3)},   {0, LED_MATRIX_Y(5) }, 1},
-    {{7|(18<<3)},   {0, LED_MATRIX_Y(5) }, 1},
-    {{7|(18<<3)},   {0, LED_MATRIX_Y(5) }, 1},
-    {{7|(18<<3)},   {0, LED_MATRIX_Y(5) }, 1},
-    {{7|(18<<3)},   {0, LED_MATRIX_Y(5) }, 1},
-    {{7|(18<<3)},   {0, LED_MATRIX_Y(5) }, 1},
-    {{7|(18<<3)},   {0, LED_MATRIX_Y(5) }, 1},
-    {{7|(18<<3)},   {0, LED_MATRIX_Y(5) }, 1},
-    {{7|(18<<3)},   {0, LED_MATRIX_Y(5) }, 1},
-    {{7|(18<<3)},   {0, LED_MATRIX_Y(5) }, 1},
-    {{7|(18<<3)},   {0, LED_MATRIX_Y(5) }, 1},
-    {{7|(18<<3)},   {0, LED_MATRIX_Y(5) }, 1},
-    {{7|(18<<3)},   {0, LED_MATRIX_Y(5) }, 1},
-    {{7|(18<<3)},   {0, LED_MATRIX_Y(5) }, 1},
-    {{7|(18<<3)},   {0, LED_MATRIX_Y(5) }, 1},
-    {{7|(18<<3)},   {0, LED_MATRIX_Y(5) }, 1},
-    {{7|(18<<3)},   {0, LED_MATRIX_Y(5) }, 1},
-    {{7|(18<<3)},   {0, LED_MATRIX_Y(5) }, 1},
-    {{7|(18<<3)},   {0, LED_MATRIX_Y(5) }, 1},
-    {{7|(18<<3)},   {0, LED_MATRIX_Y(5) }, 1},
-    {{7|(18<<3)},   {0, LED_MATRIX_Y(5) }, 1},
-    {{7|(18<<3)},   {0, LED_MATRIX_Y(5) }, 1},
+    // {{7|(18<<3)},   {0, LED_MATRIX_Y(5) }, 1},
+    // {{7|(18<<3)},   {0, LED_MATRIX_Y(5) }, 1},
+    // {{7|(18<<3)},   {0, LED_MATRIX_Y(5) }, 1},
+    // {{7|(18<<3)},   {0, LED_MATRIX_Y(5) }, 1},
+    // {{7|(18<<3)},   {0, LED_MATRIX_Y(5) }, 1},
+    // {{7|(18<<3)},   {0, LED_MATRIX_Y(5) }, 1},
+    // {{7|(18<<3)},   {0, LED_MATRIX_Y(5) }, 1},
+    // {{7|(18<<3)},   {0, LED_MATRIX_Y(5) }, 1},
+    // {{7|(18<<3)},   {0, LED_MATRIX_Y(5) }, 1},
+    // {{7|(18<<3)},   {0, LED_MATRIX_Y(5) }, 1},
+    // {{7|(18<<3)},   {0, LED_MATRIX_Y(5) }, 1},
+    // {{7|(18<<3)},   {0, LED_MATRIX_Y(5) }, 1},
+    // {{7|(18<<3)},   {0, LED_MATRIX_Y(5) }, 1},
+    // {{7|(18<<3)},   {0, LED_MATRIX_Y(5) }, 1},
+    // {{7|(18<<3)},   {0, LED_MATRIX_Y(5) }, 1},
+    // {{7|(18<<3)},   {0, LED_MATRIX_Y(5) }, 1},
+    // {{7|(18<<3)},   {0, LED_MATRIX_Y(5) }, 1},
+    // {{7|(18<<3)},   {0, LED_MATRIX_Y(5) }, 1},
+    // {{7|(18<<3)},   {0, LED_MATRIX_Y(5) }, 1},
+    // {{7|(18<<3)},   {0, LED_MATRIX_Y(5) }, 1},
+    // {{7|(18<<3)},   {0, LED_MATRIX_Y(5) }, 1},
+    // {{7|(18<<3)},   {0, LED_MATRIX_Y(5) }, 1},
+    // {{7|(18<<3)},   {0, LED_MATRIX_Y(5) }, 1},
+    // {{7|(18<<3)},   {0, LED_MATRIX_Y(5) }, 1},
+    // {{7|(18<<3)},   {0, LED_MATRIX_Y(5) }, 1},
+    // {{7|(18<<3)},   {0, LED_MATRIX_Y(5) }, 1},
+    // {{7|(18<<3)},   {0, LED_MATRIX_Y(5) }, 1},
+    // {{7|(18<<3)},   {0, LED_MATRIX_Y(5) }, 1},
+    // {{7|(18<<3)},   {0, LED_MATRIX_Y(5) }, 1},
+    // {{7|(18<<3)},   {0, LED_MATRIX_Y(5) }, 1},
     // {{116},   {0, LED_MATRIX_Y(5) }, 1},
     // {{117},   {14.45, LED_MATRIX_Y(5) }, 1},
     // {{118},   {14.45, LED_MATRIX_Y(5) }, 1},

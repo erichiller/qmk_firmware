@@ -70,7 +70,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
 #define LED_DRIVER_COUNT        1
-#define LED_DRIVER_LED_COUNT    144
+#define LED_DRIVER_LED_COUNT    114
+// #define LED_DRIVER_LED_COUNT    144
 #define LED_DRIVER_ADDR_1       0x74
 
 // #define LED_MATRIX_ENABLE

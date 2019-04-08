@@ -119,7 +119,7 @@ void led_matrix_update_pwm_buffers(void) {
 }
 
 void led_matrix_set_index_value(int index, uint8_t value) {
-    xprintf("led_matrix_set_index_value setting index %i to value %u \n", index, value);
+    xprintf("\n**led_matrix_set_index_value setting index %i to value %u \n", index, value);
     led_matrix_driver.set_value(index, value);
 }
 
@@ -191,6 +191,7 @@ void led_matrix_task(void) {
     #pragma message "LED_MATRIX_TASK()"
     // xprintf("led_matrix_task() enabled? %u\n", led_matrix_config.enable);
     if (!led_matrix_config.enable) {
+        xprintf("!!!! led_matrix_task() NOT enabled !!!! %u\n", led_matrix_config.enable);
         led_matrix_all_off();
         led_matrix_indicators();
         return;
@@ -236,6 +237,22 @@ void led_matrix_task(void) {
     // Tell the LED driver to update its state
     led_matrix_driver.flush();
 }
+
+
+#define EFFECT_RADIUS_KEYUNITS 2
+#define EFFECT_RADIUS_XY 2/6*64
+void led_matrix_effect_splash(uint16_t keycode, keyrecord_t *record) {
+    // 1. Iterate over existing array.
+    uint8_t key_index = record->event.key.row * MATRIX_COLS + record->event.key.col;
+    for ( int8_t i = key_index - ( 2*MATRIX_COLS ); i < LED_DRIVER_LED_COUNT; i+= MATRIX_COLS){
+        if ( i < 0 ){
+            continue;
+        }
+        int8_t row_index = i-EFFECT_RADIUS_KEYUNITS;
+        
+    }
+}
+
 
 void led_matrix_indicators(void) {
     led_matrix_indicators_kb();
