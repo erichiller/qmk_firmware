@@ -97,15 +97,19 @@ uint8_t g_last_led_hit[LED_HITS_TO_REMEMBER] = {255};
 uint8_t g_last_led_count = 0;
 
 void map_row_column_to_led(uint8_t row, uint8_t column, uint8_t *led_i, uint8_t *led_count) {
+
     led_matrix led;
     *led_count = 0;
 
     for (uint8_t i = 0; i < LED_DRIVER_LED_COUNT; i++) {
         // map_index_to_led(i, &led);
         led = g_leds[i];
+        xprintf("testing led[%u]\nrow = %u :: led.row = %u\ncol = %u :: led.col = %u\n", i, row, led.matrix_co.row, column, led.matrix_co.col);
         if (row == led.matrix_co.row && column == led.matrix_co.col) {
             led_i[*led_count] = i;
-            (*led_count)++;
+            if (i + 1 < LED_DRIVER_LED_COUNT){
+                (*led_count)++;
+            }
         }
     }
 }
@@ -115,6 +119,7 @@ void led_matrix_update_pwm_buffers(void) {
 }
 
 void led_matrix_set_index_value(int index, uint8_t value) {
+    xprintf("led_matrix_set_index_value setting index %i to value %u \n", index, value);
     led_matrix_driver.set_value(index, value);
 }
 
@@ -122,10 +127,27 @@ void led_matrix_set_index_value_all(uint8_t value) {
     led_matrix_driver.set_value_all(value);
 }
 
+uint8_t * get_process_led_matrix(uint16_t keycode, keyrecord_t *record) {
+    process_led_matrix( keycode, record);
+    return g_last_led_hit;
+
+}
+
 bool process_led_matrix(uint16_t keycode, keyrecord_t *record) {
+    // xprintf("process_led_matrix() keyrecord pressed? %u\n", record->event.pressed);
     if (record->event.pressed) {
         uint8_t led[8], led_count;
         map_row_column_to_led(record->event.key.row, record->event.key.col, led, &led_count);
+        
+        xprintf("process_led_matrix() map_row_column_to_led returned led=");
+        print_bin8(led_count);
+        xprintf(" (%u)", led_count);
+        for ( uint8_t i = 0; i < 8 ; i++){
+            xprintf("\nled[%u]: ", i);
+            print_bin8(led[i]);
+            xprintf(" (%u)", led[i]);
+        }
+        xprintf("\n");
         if (led_count > 0) {
             for (uint8_t i = LED_HITS_TO_REMEMBER; i > 1; i--) {
                 g_last_led_hit[i - 1] = g_last_led_hit[i - 2];
@@ -166,6 +188,8 @@ void led_matrix_uniform_brightness(void) {
 void led_matrix_custom(void) {}
 
 void led_matrix_task(void) {
+    #pragma message "LED_MATRIX_TASK()"
+    // xprintf("led_matrix_task() enabled? %u\n", led_matrix_config.enable);
     if (!led_matrix_config.enable) {
         led_matrix_all_off();
         led_matrix_indicators();
@@ -207,6 +231,7 @@ void led_matrix_task(void) {
     if (!suspend_backlight) {
         led_matrix_indicators();
     }
+    // xprintf("led_matrix_task() suspend_backlight is %u\n", suspend_backlight);
 
     // Tell the LED driver to update its state
     led_matrix_driver.flush();

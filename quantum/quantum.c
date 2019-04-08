@@ -1026,6 +1026,7 @@ void matrix_init_quantum() {
   }
   #ifdef BACKLIGHT_ENABLE
     #ifdef LED_MATRIX_ENABLE
+        #pragma message ("matrix_init_quantum ;; led_matrix_init")
         led_matrix_init();
     #else
         backlight_init_ports();

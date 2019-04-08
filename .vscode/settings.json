@@ -2,16 +2,23 @@
 {
     // Unofficially, QMK uses spaces for indentation
     "editor.insertSpaces": true,
+    "editor.tabSize": 4,
     // Configure glob patterns for excluding files and folders.
     "files.exclude": {
         "**/.build": true,
         "**/*.hex": true
     },
     "files.associations": {
+        "*.txt": "markdown",
+        "*_vimrc": "viml",
+        "CMakeLists.txt": "cmake",
+        ".clang-format": "yaml",
+        "requirements.txt": "dotenv",
         "*.h": "c",
         "*.c": "c",
         "*.cpp": "cpp",
         "*.hpp": "cpp",
-        "xstddef": "c"
+        "xstddef": "c",
+        "cmath": "c"
     }
 }

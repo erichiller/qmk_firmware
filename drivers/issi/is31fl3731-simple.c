@@ -20,6 +20,7 @@
 #include <avr/interrupt.h>
 #include <avr/io.h>
 #include <util/delay.h>
+#include "wait.h"
 #else
 #include "wait.h"
 #endif

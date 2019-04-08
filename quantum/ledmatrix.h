@@ -35,8 +35,8 @@ typedef struct led_matrix {
 	union {
 		uint8_t raw;
 		struct {
-			uint8_t row:4; // 16 max
-			uint8_t col:4; // 16 max
+			uint8_t row:3; // 16 max
+			uint8_t col:5; // 16 max
 		};
 	} matrix_co;
 	Point point;
@@ -92,6 +92,9 @@ void led_matrix_task(void);
 void led_matrix_update_pwm_buffers(void);
 
 bool process_led_matrix(uint16_t keycode, keyrecord_t *record);
+
+// edh
+uint8_t * get_process_led_matrix(uint16_t keycode, keyrecord_t *record);
 
 uint32_t led_matrix_get_tick(void);
 

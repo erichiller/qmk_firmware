@@ -29,6 +29,7 @@
  */
 
 #if defined(IS31FL3731) || defined(IS31FL3733)
+#pragma message "led_matrix_drivers.c --- IS31FL3731 is defined"
 
 #if defined(IS31FL3731)
     #include "is31fl3731-simple.h"
@@ -40,6 +41,8 @@ static void init(void) {
     i2c_init();
     #ifdef IS31FL3731
         #ifdef LED_DRIVER_ADDR_1
+        
+            #pragma message "led_matrix_drivers.c --- IS31FL3731 driver #1 is defined"
             IS31FL3731_init(LED_DRIVER_ADDR_1);
         #endif
         #ifdef LED_DRIVER_ADDR_2
